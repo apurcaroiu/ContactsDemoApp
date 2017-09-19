@@ -4,15 +4,21 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.Collection;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import mobilehertz.apurcaroiu.com.contactstestapp.R;
 import mobilehertz.apurcaroiu.com.contactstestapp.phoneContacts.presentation.model.UserViewModel;
+import mobilehertz.apurcaroiu.com.contactstestapp.phoneContacts.presentation.presenter.UserListPresenter;
 import mobilehertz.apurcaroiu.com.contactstestapp.phoneContacts.presentation.view.UsersListView;
+import mobilehertz.apurcaroiu.com.contactstestapp.phoneContacts.presentation.view.adapter.UsersAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,9 +38,17 @@ public class UserListFragment extends Fragment implements UsersListView {
     private String mParam1;
     private String mParam2;
 
+    @BindView(R.id.rv_contacts)
+    RecyclerView mRvContacts;
+
+    private UsersAdapter mUsersAdapter;
+
     private OnFragmentInteractionListener mListener;
 
+    private UserListPresenter mUserListPresenter;
+
     public UserListFragment() {
+        setRetainInstance(true);
         // Required empty public constructor
     }
 
@@ -63,19 +77,32 @@ public class UserListFragment extends Fragment implements UsersListView {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        mUsersAdapter = new UsersAdapter(getActivity());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_user_list, container, false);
+        ButterKnife.bind(this,view);
+        initializeRecyclerView();
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        this.mUserListPresenter.setView(this);
+        if (savedInstanceState != null){
+            this.mUserListPresenter.getContactsList(0,100,"seed");
         }
     }
 
@@ -140,4 +167,15 @@ public class UserListFragment extends Fragment implements UsersListView {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    private void initializeRecyclerView() {
+        this.mUsersAdapter.setOnUserClickListener(onUserClickListener);
+        this.mRvContacts.setAdapter(mUsersAdapter);
+    }
+
+    private UsersAdapter.OnUserClickListener onUserClickListener = userviewModel -> {
+              if (mUserListPresenter != null && userviewModel != null){
+                  this.mUserListPresenter.onUserModelClicked(userviewModel);
+              }
+    };
 }

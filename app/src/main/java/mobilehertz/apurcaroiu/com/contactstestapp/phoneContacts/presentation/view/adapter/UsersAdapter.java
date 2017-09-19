@@ -2,9 +2,12 @@ package mobilehertz.apurcaroiu.com.contactstestapp.phoneContacts.presentation.vi
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.bumptech.glide.Glide;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -22,6 +25,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UserViewHolder> {
     private List<UserViewModel> mUserViewModelList;
     private Context mContext;
 
+    private OnUserClickListener mOnUserClickListener;
+
     public UsersAdapter(Context mContext) {
         this.mUserViewModelList = Collections.emptyList();
         this.mContext = mContext;
@@ -32,7 +37,10 @@ public class UsersAdapter extends RecyclerView.Adapter<UserViewHolder> {
     }
 
     private void updateUserList(Collection<UserViewModel> userViewModels){
-
+        if ( this.mUserViewModelList != null){
+            this.mUserViewModelList = (List<UserViewModel>)userViewModels;
+            notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -47,10 +55,24 @@ public class UsersAdapter extends RecyclerView.Adapter<UserViewHolder> {
         final UserViewModel userViewModel = mUserViewModelList.get(position);
         holder.name.setText(userViewModel.getFirstName());
         Glide.with(mContext).load(userViewModel.getPictureUrl()).into(holder.profilePicture);
+
+        holder.itemView.setOnClickListener(view -> {
+            if (mOnUserClickListener != null){
+                mOnUserClickListener.onItemClicked(userViewModel);
+            } else {
+                Log.d("UsersAdapter","onClickListener not set");
+            }
+
+        });
     }
 
     @Override
     public int getItemCount() {
         return (this.mUserViewModelList != null)? mUserViewModelList.size():0;
+    }
+
+    public void setOnUserClickListener(OnUserClickListener onUserClickListener){
+        this.mOnUserClickListener = onUserClickListener;
+
     }
 }

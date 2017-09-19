@@ -30,6 +30,10 @@ public class UserListPresenter implements Presenter {
         this.mUserViewModelMapper = mUserViewModelMapper;
     }
 
+    public void onUserModelClicked(UserViewModel userViewModel) {
+        this.mUsersListView.viewUser(userViewModel);
+    }
+
     public void setView(@NonNull UsersListView usersListView){
         this.mUsersListView = usersListView;
     }

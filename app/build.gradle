@@ -41,8 +41,10 @@ dependencies {
     implementation appDependencies.rxJava
     implementation appDependencies.rxAndroid
     implementation appDependencies.javaxAnnotation
+    implementation appDependencies.glide
 
     testImplementation appTestDependencies.junit
     testImplementation appTestDependencies.mockito
     testImplementation appTestDependencies.assertj
+    implementation 'com.android.support:cardview-v7:26.1.0'
 }
