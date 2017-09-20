@@ -17,14 +17,14 @@ public class UserGatewayImpl implements UserGateway {
 
     protected static final RestAPI mService = RetrofitServiceFactory.createRetrofitService(RestAPI.class,RestAPI.BASE_ENDPOINT);
 
-    private UserEntityAutoMapper muUerEntityAutoMapper;
+    private UserEntityAutoMapper muUserEntityAutoMapper;
 
-    public UserGatewayImpl(UserEntityAutoMapper muUerEntityAutoMapper) {
-        this.muUerEntityAutoMapper = muUerEntityAutoMapper;
+    public UserGatewayImpl(UserEntityAutoMapper userEntityAutoMapper) {
+        this.muUserEntityAutoMapper = userEntityAutoMapper;
     }
 
     @Override
     public Single<List<User>> getUsers(int pageNumber, int pageSize, String seed) {
-        return mService.getUserEntityList(pageNumber,pageSize,seed).map(this.muUerEntityAutoMapper::transform);
+        return mService.getUserEntityListResponse(pageNumber,pageSize,seed).map(this.muUserEntityAutoMapper::transform);
     }
 }

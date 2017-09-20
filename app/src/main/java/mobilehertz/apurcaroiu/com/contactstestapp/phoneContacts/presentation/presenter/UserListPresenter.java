@@ -10,6 +10,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import mobilehertz.apurcaroiu.com.contactstestapp.phoneContacts.domain.User;
 import mobilehertz.apurcaroiu.com.contactstestapp.phoneContacts.domain.interactor.DefaultObserver;
+import mobilehertz.apurcaroiu.com.contactstestapp.phoneContacts.domain.interactor.DisposableManager;
 import mobilehertz.apurcaroiu.com.contactstestapp.phoneContacts.domain.interactor.RetrieveUserList;
 import mobilehertz.apurcaroiu.com.contactstestapp.phoneContacts.presentation.mapper.UserViewModelMapper;
 import mobilehertz.apurcaroiu.com.contactstestapp.phoneContacts.presentation.model.UserViewModel;
@@ -77,13 +78,15 @@ public class UserListPresenter implements Presenter {
 
     @Override
     public void destroy() {
-
+       this.mUsersListView = null;
+       DisposableManager.dispose();
     }
 
     private class   UserListObservable extends DefaultObserver<List<User>>{
         @Override
         public void onSubscribe(Disposable d) {
             super.onSubscribe(d);
+            DisposableManager.add(d);
         }
 
         @Override

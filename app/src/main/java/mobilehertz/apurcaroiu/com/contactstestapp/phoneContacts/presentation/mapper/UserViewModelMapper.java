@@ -24,6 +24,7 @@ public class UserViewModelMapper {
         userViewModel.setLastName(user.getLastName());
         userViewModel.setPhoneNumber(user.getPhoneNumber());
         userViewModel.setPictureUrl(user.getPictureUrl());
+        userViewModel.setCoverUrl(user.getCoverUrl());
 
         return userViewModel;
     }

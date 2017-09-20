@@ -36,10 +36,10 @@ public class UsersAdapter extends RecyclerView.Adapter<UserViewHolder> {
         void onItemClicked(UserViewModel userviewModel);
     }
 
-    private void updateUserList(Collection<UserViewModel> userViewModels){
+    public void updateUserList(Collection<UserViewModel> userViewModels){
         if ( this.mUserViewModelList != null){
             this.mUserViewModelList = (List<UserViewModel>)userViewModels;
-            notifyDataSetChanged();
+            this.notifyDataSetChanged();
         }
     }
 

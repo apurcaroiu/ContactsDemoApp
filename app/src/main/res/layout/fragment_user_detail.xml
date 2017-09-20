@@ -5,15 +5,27 @@
     android:layout_height="match_parent"
     android:background="#fff"
     tools:context="mobilehertz.apurcaroiu.com.contactstestapp.phoneContacts.presentation.view.fragment.UserDetailFragment">
-
     <RelativeLayout
+        android:background="#add8e6"
         android:orientation="vertical"
         android:id="@+id/picture_detail"
         android:layout_width="match_parent"
         android:layout_height="180dp">
         <ImageView
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:id="@+id/cover_img"
             android:layout_centerInParent="true"
             android:background="@drawable/ic_launcher_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:text="Louane Vidal"
+            android:textColor="#000"
+            android:layout_below="@id/cover_img"
+            android:id="@+id/detail_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </RelativeLayout>
@@ -25,7 +37,7 @@
         tools:layout_editor_absoluteX="8dp"
         android:id="@+id/cardViewPhone"
         app:layout_constraintTop_toBottomOf="@+id/picture_detail"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

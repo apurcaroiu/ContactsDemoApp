@@ -11,10 +11,18 @@ public class User {
     private String lastName;
     private String phoneNumber;
     private String pictureUrl;
+    private String coverUrl;
     private String address;
     private String email;
     private String nationality;
 
+    public String getCoverUrl() {
+        return coverUrl;
+    }
+
+    public void setCoverUrl(String coverUrl) {
+        this.coverUrl = coverUrl;
+    }
 
     public String getGender() {
         return gender;

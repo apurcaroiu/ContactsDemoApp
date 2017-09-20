@@ -12,6 +12,15 @@ public class UserViewModel {
     private String pictureUrl;
     private String address;
     private String email;
+    private String coverUrl;
+
+    public String getCoverUrl() {
+        return coverUrl;
+    }
+
+    public void setCoverUrl(String coverUrl) {
+        this.coverUrl = coverUrl;
+    }
 
     public String getFirstName() {
         return firstName;

@@ -34,10 +34,12 @@ dependencies {
     implementation appDependencies.design
     implementation appDependencies.recyclerView
     implementation appDependencies.constraintLayout
+    implementation appDependencies.cardView
     implementation appDependencies.retrofit
     implementation appDependencies.retrofitRxAdapter
     implementation appDependencies.retrofitGsonConverter
     implementation appDependencies.butterKnife
+    annotationProcessor appDependencies.butterKnifeAnnotation
     implementation appDependencies.rxJava
     implementation appDependencies.rxAndroid
     implementation appDependencies.javaxAnnotation
@@ -46,5 +48,4 @@ dependencies {
     testImplementation appTestDependencies.junit
     testImplementation appTestDependencies.mockito
     testImplementation appTestDependencies.assertj
-    implementation 'com.android.support:cardview-v7:26.1.0'
 }
