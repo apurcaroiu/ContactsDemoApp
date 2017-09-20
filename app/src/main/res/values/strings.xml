@@ -3,4 +3,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="users">Users</string>
+    <string name="saved_state">SAVED_STATE</string>
+    <string name="fragment">current_fragment</string>
 </resources>

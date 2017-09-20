@@ -1,14 +1,12 @@
 package mobilehertz.apurcaroiu.com.contactstestapp.phoneContacts.presentation.view.activity;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import mobilehertz.apurcaroiu.com.contactstestapp.phoneContacts.presentation.view.fragment.UserDetailFragment;
-import mobilehertz.apurcaroiu.com.contactstestapp.phoneContacts.presentation.view.fragment.UserListFragment;
 
 /**
  * Created by apurcaroiu on 9/19/2017.

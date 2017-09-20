@@ -1,20 +1,28 @@
 package mobilehertz.apurcaroiu.com.contactstestapp.phoneContacts.presentation.view.fragment;
 
+import android.Manifest;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import mobilehertz.apurcaroiu.com.contactstestapp.R;
 
@@ -56,6 +64,15 @@ public class UserDetailFragment extends Fragment {
     TextView address;
     @BindView(R.id.cover_img)
     ImageView coverImg;
+
+    @BindView(R.id.cardViewAddress)
+    CardView cardViewAddress;
+
+    @BindView(R.id.cardViewPhone)
+    CardView cardViewPhone;
+
+    @BindView(R.id.cardViewEmail)
+    CardView cardViewEmail;
 
     public UserDetailFragment() {
         // Required empty public constructor
@@ -163,5 +180,48 @@ public class UserDetailFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onUserDetailFragmentInteraction(Uri uri);
+    }
+
+    public void startNavigation(String address){
+        Log.d("UserDetailsFragment", " not implemented");
+    }
+
+    public void sendEmailToUser(String emailAdress){
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("message/rfc822");
+        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{emailAdress});
+        i.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+        i.putExtra(Intent.EXTRA_TEXT   , "Body");
+        try {
+            startActivity(Intent.createChooser(i, "Sending email"));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Log.d("UserDetailsFragment", " no clients found");
+        }
+    }
+
+    public void callUser(String phoneNumber){
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+
+        callIntent.setData(Uri.parse("tel:" + phoneNumber));
+
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        startActivity(callIntent);
+    }
+
+    @OnClick(R.id.cardViewPhone)
+    public void OnCardViewPhoneClicked(){
+        callUser(phoneNumber.getText().toString());
+    }
+
+    @OnClick(R.id.cardViewEmail)
+    public void OnCardViewEmailClicked(){
+        sendEmailToUser(email.getText().toString());
+    }
+
+    @OnClick(R.id.cardViewAddress)
+    public void OnCardViewAddressClicked(){
+       startNavigation(address.getText().toString());
     }
 }

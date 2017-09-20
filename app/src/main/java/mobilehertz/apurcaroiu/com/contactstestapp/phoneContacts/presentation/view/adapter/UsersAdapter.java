@@ -54,7 +54,9 @@ public class UsersAdapter extends RecyclerView.Adapter<UserViewHolder> {
     public void onBindViewHolder(UserViewHolder holder, int position) {
         final UserViewModel userViewModel = mUserViewModelList.get(position);
         holder.name.setText(userViewModel.getFirstName());
-        Glide.with(mContext).load(userViewModel.getPictureUrl()).into(holder.profilePicture);
+        if (mContext != null){
+            Glide.with(holder.itemView.getContext()).load(userViewModel.getPictureUrl()).into(holder.profilePicture);
+        }
 
         holder.itemView.setOnClickListener(view -> {
             if (mOnUserClickListener != null){
