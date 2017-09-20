@@ -1,7 +1,6 @@
 package mobilehertz.apurcaroiu.com.contactstestapp.phoneContacts.data.entity.datamapper;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import mobilehertz.apurcaroiu.com.contactstestapp.phoneContacts.data.entity.UserEntity;

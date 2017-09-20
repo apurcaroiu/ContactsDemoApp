@@ -53,6 +53,11 @@ public class UserListPresenter implements Presenter {
 
     private void hideViewLoading() {
         this.mUsersListView.hideLoading();
+
+    }
+
+    private void showLoadingError(){
+        this.mUsersListView.showError();
     }
 
     private void updateContactList(Collection<User> users){
@@ -100,6 +105,7 @@ public class UserListPresenter implements Presenter {
         public void onError(Throwable e) {
             super.onError(e);
             UserListPresenter.this.hideViewLoading();
+            UserListPresenter.this.showLoadingError();
         }
     }
 }

@@ -1,6 +1,7 @@
 package mobilehertz.apurcaroiu.com.contactstestapp.phoneContacts.presentation.view.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,8 +10,8 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import mobilehertz.apurcaroiu.com.contactstestapp.R;
@@ -26,19 +27,50 @@ public class UsersAdapter extends RecyclerView.Adapter<UserViewHolder> {
     private Context mContext;
 
     private OnUserClickListener mOnUserClickListener;
+    private OnLoadListener mOnLoadListener;
 
-    public UsersAdapter(Context mContext) {
-        this.mUserViewModelList = Collections.emptyList();
+    private RecyclerView mRecyclerView;
+
+    private int mViewItemsThreshold = 2;
+    private boolean mIsLoading;
+    private int mLastVisibleItem;
+    private int mTotalItemCount;
+    private int mCurrentPageLoading = 0;
+
+    public UsersAdapter(Context mContext, RecyclerView recyclerView) {
+        this.mUserViewModelList = new ArrayList<>(20);
         this.mContext = mContext;
+        this.mRecyclerView = recyclerView;
+        final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        mRecyclerView.setOnScrollChangeListener((view, i, i1, i2, i3) -> {
+            mTotalItemCount = linearLayoutManager.getItemCount();
+            mLastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+            if (!mIsLoading && mTotalItemCount <= (mLastVisibleItem + mViewItemsThreshold)) {
+                if (mOnLoadListener != null) {
+                    //lazy load next page
+                    mCurrentPageLoading = mCurrentPageLoading +1;
+                    mOnLoadListener.onLoadMoreItems(mCurrentPageLoading);
+                }
+                mIsLoading = true;
+            }
+        });
     }
 
     public interface OnUserClickListener {
         void onItemClicked(UserViewModel userviewModel);
     }
 
+    public interface OnLoadListener{
+        void onLoadMoreItems(int pageNumber);
+    }
+
+    public void setOnLoadListener(OnLoadListener onLoadListener){
+        this.mOnLoadListener = onLoadListener;
+    }
+
     public void updateUserList(Collection<UserViewModel> userViewModels){
         if ( this.mUserViewModelList != null){
-            this.mUserViewModelList = (List<UserViewModel>)userViewModels;
+            this.mUserViewModelList.addAll(userViewModels);
             this.notifyDataSetChanged();
         }
     }
@@ -76,5 +108,9 @@ public class UsersAdapter extends RecyclerView.Adapter<UserViewHolder> {
     public void setOnUserClickListener(OnUserClickListener onUserClickListener){
         this.mOnUserClickListener = onUserClickListener;
 
+    }
+
+    public void resetLoadingState(){
+        mIsLoading = false;
     }
 }

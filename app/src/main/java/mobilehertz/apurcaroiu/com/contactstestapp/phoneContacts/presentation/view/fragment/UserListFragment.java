@@ -1,6 +1,7 @@
 package mobilehertz.apurcaroiu.com.contactstestapp.phoneContacts.presentation.view.fragment;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.Collection;
 
@@ -42,6 +44,8 @@ public class UserListFragment extends Fragment implements UsersListView {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private ProgressDialog mLoadingDialog;
 
     Unbinder mUnbinder;
 
@@ -87,8 +91,11 @@ public class UserListFragment extends Fragment implements UsersListView {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        mLoadingDialog = new ProgressDialog(getActivity());
+        mLoadingDialog.setMessage("Loading more users...");
+        mLoadingDialog.setCancelable(false);
+        mLoadingDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mUserListPresenter = new UserListPresenter(new RetrieveUserList(mUserGateway), new UserViewModelMapper());
-        mUsersAdapter = new UsersAdapter(getActivity());
     }
 
     @Override
@@ -113,7 +120,7 @@ public class UserListFragment extends Fragment implements UsersListView {
         super.onViewCreated(view, savedInstanceState);
         this.mUserListPresenter.setView(this);
         if (savedInstanceState == null){
-            this.mUserListPresenter.getContactsList(0,10,"seed");
+            this.mUserListPresenter.getContactsList(0,12,"seed");
         }
     }
 
@@ -136,12 +143,17 @@ public class UserListFragment extends Fragment implements UsersListView {
 
     @Override
     public void showLoading() {
-
+        if (mLoadingDialog != null){
+            mLoadingDialog.show();
+        }
     }
 
     @Override
     public void hideLoading() {
-
+        this.mUsersAdapter.resetLoadingState();
+        if (mLoadingDialog != null){
+            mLoadingDialog.dismiss();
+        }
     }
 
     @Override
@@ -208,10 +220,14 @@ public class UserListFragment extends Fragment implements UsersListView {
     }
 
     private void initializeRecyclerView() {
-        this.mUsersAdapter.setOnUserClickListener(onUserClickListener);
         this.mRvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
+        mUsersAdapter = new UsersAdapter(getActivity(),mRvContacts);
         this.mRvContacts.setAdapter(mUsersAdapter);
+        this.mUsersAdapter.setOnUserClickListener(onUserClickListener);
+        this.mUsersAdapter.setOnLoadListener(onLoadListener);
     }
+
+    private UsersAdapter.OnLoadListener onLoadListener = (pageNumber) -> UserListFragment.this.mUserListPresenter.getContactsList(pageNumber,12,"seed");
 
     private UsersAdapter.OnUserClickListener onUserClickListener = userviewModel -> {
               if (mUserListPresenter != null && userviewModel != null){
